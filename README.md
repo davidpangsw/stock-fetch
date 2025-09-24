@@ -1,12 +1,13 @@
 ## Intro
-- Only data before 2022-01-01
+- Set data range in main.py
 
 ## Run
 1. In `main.py`, set the configuration of downloading
-2. In `database.py`, set the configuration of databse
-3. Activate venv (See below)
-4. Inside venv, `pip install -r requirements`
-5. `python main.py`
+2. In `.env`, set the environment variables
+3. Execute `./run.sh`, in the script, it automatically:
+   1. Activates venv (See below)
+   2. Inside venv, install dependencies using `pip install -r requirements`
+   3. Executes `python main.py`
 
 ## Activate venv
 - Linux
