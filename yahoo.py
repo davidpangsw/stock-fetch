@@ -1,7 +1,6 @@
 import json
 import time
 import yfinance as yf
-from pathlib import Path
 
 class Yahoo:
     def __init__(self, repo, dump_dir):

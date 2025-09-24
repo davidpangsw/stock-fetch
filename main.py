@@ -1,7 +1,7 @@
 from yahoo import Yahoo
 from database import STOCK_REPO
 
-DIR_DATA = Path('./data')
+DIR_DATA = './data'
 INFO_KEYS = [
     'sector', 'industry',
     'country', 'exchange',
