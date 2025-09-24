@@ -1,11 +1,12 @@
 import json
 import time
 import yfinance as yf
-from database import STOCK_REPO
+from pathlib import Path
 
 class Yahoo:
-    def __init__(self, dir):
-        self.dir = dir;
+    def __init__(self, repo, dump_dir):
+        self.repo = repo
+        self.dump_dir = dump_dir
     
     # def resetInfos(self, symbols, info_keys):
     #     tickers = yf.Tickers(symbols)
@@ -15,17 +16,17 @@ class Yahoo:
     #         ticker = tickers.tickers[symbol.upper()]
     #         info = { key: ticker.info[key] if key in ticker.info else None for key in info_keys }
     #         info['lastUpdated'] = lastUpdated
-    #         if self.dir is not None:
-    #             json.dump(ticker.info, open(f'{self.dir}/info/raw/{symbol.lower()}.json', 'w')) # dump raw info
-    #             json.dump(info, open(f'{self.dir}/info/{symbol.lower()}.json', 'w')) # dump custom info
+    #         if self.dump_dir is not None:
+    #             json.dump(ticker.info, open(f'{self.dump_dir}/info/raw/{symbol.lower()}.json', 'w')) # dump raw info
+    #             json.dump(info, open(f'{self.dump_dir}/info/{symbol.lower()}.json', 'w')) # dump custom info
 
     #         # save custom info to mongodb
-    #         result = STOCK_REPO.replaceOneInfo(info)
+    #         result = self.repo.replaceOneInfo(info)
     #         print(result)
 
     def reset(self, symbols, info_keys, price_start, price_end):
-        STOCK_REPO.drop()
-        STOCK_REPO.create()
+        self.repo.drop()
+        self.repo.create()
 
         tickers = yf.Tickers(symbols)
         lastUpdated = time.time()
@@ -41,11 +42,11 @@ class Yahoo:
                 continue
             stock['prices'] = self.fetchPrices(symbol, price_start, price_end)
             stock['lastUpdated'] = lastUpdated
-            if self.dir is not None:
-                json.dump(ticker.info, open(f'{self.dir}/info/raw/{symbol.lower()}.json', 'w')) # dump raw info
-                json.dump(stock, open(f'{self.dir}/stock/{symbol.lower()}.json', 'w')) # dump custom info
+            if self.dump_dir is not None:
+                json.dump(ticker.info, open(f'{self.dump_dir}/info/raw/{symbol.lower()}.json', 'w')) # dump raw info
+                json.dump(stock, open(f'{self.dump_dir}/stock/{symbol.lower()}.json', 'w')) # dump custom info
             
-            result = STOCK_REPO.insertOne(stock)
+            result = self.repo.insertOne(stock)
             print(f'inserted symbol={symbol}; result={result}')
             stock.clear()
     
