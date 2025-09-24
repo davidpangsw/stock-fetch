@@ -2,6 +2,13 @@ import json
 import time
 import yfinance as yf
 
+INFO_KEYS = [
+    'sector', 'industry',
+    'country', 'exchange',
+    'shortName', 'longName', 'symbol', 'market', 'marketCap',
+    'longBusinessSummary', 'website',
+]
+
 class Yahoo:
     def __init__(self, repo, dump_dir):
         self.repo = repo
@@ -23,7 +30,7 @@ class Yahoo:
     #         result = self.repo.replaceOneInfo(info)
     #         print(result)
 
-    def reset(self, symbols, info_keys, price_start, price_end):
+    def reset(self, symbols, price_start, price_end):
         self.repo.drop()
         self.repo.create()
 
@@ -34,7 +41,7 @@ class Yahoo:
             print(f'symbol={symbol}')
             try:
                 ticker = tickers.tickers[symbol.upper()]
-                stock = { key: ticker.info[key] if key in ticker.info else None for key in info_keys }
+                stock = { key: ticker.info[key] if key in ticker.info else None for key in INFO_KEYS }
                 # print(f'stock={stock}')
             except Exception as e:
                 print(e)
@@ -53,6 +60,10 @@ class Yahoo:
         df = yf.download([symbol], start=start, end=end, group_by='ticker')
         lastUpdated = time.time()
         # print(df)
+        # flatten columns from ('AAPL', 'Open') to ('Open')
+        print(df.columns.tolist())
+        df.columns = [f"{metric}" for ticker, metric in df.columns]
+        print(df.columns.tolist())
         
         count = 0
         items = []
