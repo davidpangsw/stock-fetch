@@ -1,8 +1,8 @@
 ## Intro
-- Set data range in main.py
+- Set data range in `config.py`
 
 ## Run
-1. In `main.py`, set the configuration of downloading
+1. In `config.py`, set the configuration of downloading
 2. In `.env`, set the environment variables
 3. Execute `./run.sh`, in the script, it automatically:
    1. Activates venv (See below)

@@ -1,12 +1,9 @@
 from yahoo import Yahoo
 from database import STOCK_REPO
 from symbols import get_symbols, scrape_symbols
+from config import NUMBER_OF_SYMBOLS, DATE_START, DATE_END
 
-NUMBER_OF_SYMBOLS = 20
-DATE_START = "2024-09-23" 
-DATE_END = "2025-09-23"     # end exclusive
-
-symbols = scrape_symbols()[:20]
+symbols = scrape_symbols()[:NUMBER_OF_SYMBOLS]
 # symbols = get_symbols(NUMBER_OF_SYMBOLS)
 # symbols = ['AAPL', 'HON']
 yahoo = Yahoo(repo=STOCK_REPO, dump_dir=None)
