@@ -22,19 +22,19 @@ class StockRepository(ABC):
         pass
 
     @abstractmethod
-    def getStock(self, symbol, limit=20):
+    def get_stock(self, symbol, limit=20):
         pass
 
     @abstractmethod
-    def replaceOne(self, doc):
+    def replace_one(self, doc):
         pass
 
     @abstractmethod
-    def insertOne(self, doc):
+    def insert_one(self, doc):
         pass
 
     @abstractmethod
-    def insertMany(self, docs):
+    def insert_many(self, docs):
         pass
 
     @abstractmethod

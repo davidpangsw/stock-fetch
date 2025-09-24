@@ -52,14 +52,14 @@ class StockRepositoryMysql(StockRepository):
         self.conn.reconnect()
         return self.conn.cursor()
 
-    def timestampToString(self, timestamp):
+    def timestamp_to_string(self, timestamp):
         if timestamp < 0:
             dt = datetime.utcfromtimestamp(0) + timedelta(seconds=timestamp)
         else:
             dt = datetime.utcfromtimestamp(timestamp)
         return dt.strftime('%Y-%m-%d %H:%M:%S')
 
-    def getStock(self, symbol, limit=20):
+    def get_stock(self, symbol, limit=20):
         cursor = self.cursor()
         cursor.execute("""
         SELECT * FROM stocks
@@ -74,10 +74,10 @@ class StockRepositoryMysql(StockRepository):
         # print(result)
         return result
 
-    def replaceOne(self, doc):
+    def replace_one(self, doc):
         raise NotImplementedError()
 
-    def insertOne(self, doc):
+    def insert_one(self, doc):
         prices = doc['prices']
 
         cursor = self.cursor()
@@ -89,7 +89,7 @@ class StockRepositoryMysql(StockRepository):
             {
                 "longName": doc['longName'],
                 "symbol": doc['symbol'],
-                "lastUpdated": self.timestampToString(doc['lastUpdated']),
+                "lastUpdated": self.timestamp_to_string(doc['lastUpdated']),
             })
         stockId = cursor.lastrowid
 
@@ -106,7 +106,7 @@ class StockRepositoryMysql(StockRepository):
                 """,
                 [{
                     'stock_id': stockId,
-                    'date': self.timestampToString(price['date']),
+                    'date': self.timestamp_to_string(price['date']),
                     'open': price['open'],
                     'high': price['high'],
                     'low': price['low'],
@@ -119,7 +119,7 @@ class StockRepositoryMysql(StockRepository):
             'inserted_id': stockId,
         }
 
-    def insertMany(self, docs):
+    def insert_many(self, docs):
         raise NotImplementedError()
 
     def drop(self):

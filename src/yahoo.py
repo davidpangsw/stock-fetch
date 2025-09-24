@@ -27,7 +27,7 @@ class Yahoo:
     #             json.dump(info, open(f'{self.dump_dir}/info/{symbol.lower()}.json', 'w')) # dump custom info
 
     #         # save custom info to mongodb
-    #         result = self.repo.replaceOneInfo(info)
+    #         result = self.repo.replace_one_info(info)
     #         print(result)
 
     def reset(self, symbols, price_start, price_end):
@@ -46,17 +46,17 @@ class Yahoo:
             except Exception as e:
                 print(e)
                 continue
-            stock['prices'] = self.fetchPrices(symbol, price_start, price_end)
+            stock['prices'] = self.fetch_prices(symbol, price_start, price_end)
             stock['lastUpdated'] = lastUpdated
             if self.dump_dir is not None:
                 json.dump(ticker.info, open(f'{self.dump_dir}/info/raw/{symbol.lower()}.json', 'w')) # dump raw info
                 json.dump(stock, open(f'{self.dump_dir}/stock/{symbol.lower()}.json', 'w')) # dump custom info
             
-            result = self.repo.insertOne(stock)
+            result = self.repo.insert_one(stock)
             print(f'inserted symbol={symbol}; result={result}')
             stock.clear()
     
-    def fetchPrices(self, symbol, start, end):
+    def fetch_prices(self, symbol, start, end):
         df = yf.download([symbol], start=start, end=end, group_by='ticker')
         lastUpdated = time.time()
         # print(df)

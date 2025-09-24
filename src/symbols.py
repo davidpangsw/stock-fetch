@@ -9,10 +9,6 @@ from config import DIR_DATA
 #   1000 (page 1)
 #   1001 (page 2)
 # ...
-def fetchSymbols():
-    pass
-
-
 def scrape_symbols():
     url = "https://finviz.com/screener.ashx?v=411&f=cap_midover,geo_usa&r=1000"
     response = requests.get(url)
@@ -31,7 +27,9 @@ def scrape_symbols():
     
     print(f"Extracted {len(symbols)} symbols and saved to symbols_raw.txt")
 
-def getSymbols(n=None):
+    return symbols
+
+def get_symbols(n=None):
     with open(f'{DIR_DATA}/symbols/symbols.txt') as file:
         lines = [line.rstrip() for line in file]
     with open(f'{DIR_DATA}/symbols/blacklist.txt') as file:
