@@ -3,6 +3,7 @@
 
 from stock_repository.stock_repository_mongo import StockRepositoryMongo
 from stock_repository.stock_repository_mysql import StockRepositoryMysql
+from stock_repository.stock_repository_postgres import StockRepositoryPostgres
 import os
 
 env = os.environ
@@ -11,5 +12,7 @@ if DB_TYPE == 'mongo':
     STOCK_REPO = StockRepositoryMongo(env['CONN_STR'], env['DATABASE'])
 elif DB_TYPE == 'mysql':
     STOCK_REPO = StockRepositoryMysql(env['CONN_STR'], env['DATABASE'])
+elif DB_TYPE == 'postgres':
+    STOCK_REPO = StockRepositoryPostgres(env['CONN_STR'], env['DATABASE'])
 else:
     raise ValueError(f"Unknown database type:[{DB_TYPE}]")

@@ -34,6 +34,8 @@ class Yahoo:
         self.repo.drop()
         self.repo.create()
 
+        # symbols = ["VG"]
+        # tickers = type('',(object,),{"tickers": {"VG": yf.Ticker("VG")}})()
         tickers = yf.Tickers(symbols)
         lastUpdated = time.time()
 
@@ -53,17 +55,17 @@ class Yahoo:
                 json.dump(stock, open(f'{self.dump_dir}/stock/{symbol.lower()}.json', 'w')) # dump custom info
             
             result = self.repo.insert_one(stock)
-            print(f'inserted symbol={symbol}; result={result}')
+            # print(f'inserted symbol={symbol}; result={result}')
             stock.clear()
     
     def fetch_prices(self, symbol, start, end):
-        df = yf.download([symbol], start=start, end=end, group_by='ticker')
+        df = yf.download([symbol], start=start, end=end, group_by='ticker', auto_adjust=True, progress=False)
         lastUpdated = time.time()
         # print(df)
         # flatten columns from ('AAPL', 'Open') to ('Open')
-        print(df.columns.tolist())
+        # print(df.columns.tolist())
         df.columns = [f"{metric}" for ticker, metric in df.columns]
-        print(df.columns.tolist())
+        # print(df.columns.tolist())
         
         count = 0
         items = []
@@ -84,9 +86,15 @@ class Yahoo:
             items.append(item)
 
             # print(item)
-            if count % 1000 == 0:
+            if count % 10000 == 0 and count > 0:
                 print(count, item)
             count += 1
         if count == 0:
             print(f"Info: No prices for {symbol}")
         return items   # use yield?
+
+
+"""
+psycopg.errors.NotNullViolation: null value in column "longname" of relation "stocks" violates not-null constraint
+DETAIL:  Failing row contains (289, null, VG, 2025-09-25 08:39:15).
+"""
